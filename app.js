@@ -1,13 +1,15 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const indexRouter = require("./routes/index");
 const app = express();
 
 app.use(cors());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
-require('./db/initialise');
+require("./db/initialise");
 
 app.use("/", indexRouter);
 
