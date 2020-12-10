@@ -48,3 +48,12 @@ exports.findByUsernameAndAccount = async (user) => {
       return error;
     });
 };
+
+exports.allUsers = async () => {
+  try {
+    return await knex.from("users").select("*");
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};

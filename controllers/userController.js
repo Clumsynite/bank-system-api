@@ -52,3 +52,12 @@ exports.logout = async (req, res) => {
   res.cookie("auth", "", { maxAge: 0, expires: Date.now() });
   res.json("Logout Successful");
 };
+
+exports.allUsers = async (req, res) => {
+  try {
+    const allUsers = await userQueries.allUsers();
+    res.json(allUsers);
+  } catch (error) {
+    return res.json({ error });
+  }
+};
