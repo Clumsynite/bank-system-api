@@ -52,11 +52,11 @@ knex.schema
           table.uuid("transaction_id").primary();
           table.timestamp("transaction_time").defaultTo(knex.fn.now());
           table.string("user_id");
-          table.integer("cash_withdrawn");
-          table.integer("cash_deposited");
-          table.integer("total");
+          table.integer("cash_withdrawn").defaultTo(0);
+          table.integer("cash_deposited").defaultTo(0);
+          table.integer("total").defaultTo(0);
         })
-        .then(() => console.log("users Table created"))
+        .then(() => console.log("accounts Table created"))
         .catch((err) => {
           console.log(err);
           throw err;
