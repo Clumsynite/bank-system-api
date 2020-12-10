@@ -28,7 +28,7 @@ exports.findByUsername = async (username) => {
 exports.usernameExists = async (username) => {
   return await knex
     .from("users")
-    .select("username")
+    .select("*")
     .where("username", username)
     .then((result) => result.length > 0)
     .catch((error) => {
@@ -37,10 +37,10 @@ exports.usernameExists = async (username) => {
     });
 };
 
-exports.findByUsernameAndPassword = async (user) => {
+exports.findByUsernameAndAccount = async (user) => {
   return await knex
     .from("users")
-    .select("username", "password")
+    .select("*")
     .where(user)
     .then((result) => result)
     .catch((error) => {
