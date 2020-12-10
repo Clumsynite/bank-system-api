@@ -10,7 +10,7 @@ const verifyToken = async (req, res, next) => {
       if (err) {
         return res.json({ msg: "Token doen't match" });
       }
-      req.user_data = data;
+      req.user = data;
       next();
     });
   } else if (token) {
@@ -18,7 +18,7 @@ const verifyToken = async (req, res, next) => {
       if (err) {
         return res.json({ msg: "Token doen't match" });
       }
-      req.user_data = data;
+      req.user = data;
       next();
     });
   } else {
