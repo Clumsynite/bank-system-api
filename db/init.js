@@ -49,7 +49,7 @@ knex.schema
     if (!exists) {
       return knex.schema
         .createTable("accounts", (table) => {
-          table.uuid("transaction_id").primary();
+          table.increments("transaction_id").primary();
           table.timestamp("transaction_time").defaultTo(knex.fn.now());
           table.string("user_id");
           table.integer("cash_withdrawn").defaultTo(0);
