@@ -8,7 +8,7 @@ const verifyToken = async (req, res, next) => {
     const bearerToken = bearer[1];
     jwt.verify(bearerToken, process.env.JWT_SECRET, (err, data) => {
       if (err) {
-        return res.status(403).send("Error");
+        return res.json({ msg: "Token doen't match" });
       }
       req.user_data = data;
       next();
@@ -16,13 +16,13 @@ const verifyToken = async (req, res, next) => {
   } else if (token) {
     jwt.verify(token, process.env.JWT_SECRET, (err, data) => {
       if (err) {
-        return res.status(403).send("Error");
+        return res.json({ msg: "Token doen't match" });
       }
       req.user_data = data;
       next();
     });
   } else {
-    return res.status(401);
+    return res.json({ msg: "Token not Found" });
   }
 };
 
