@@ -1,4 +1,5 @@
 const bcryptjs = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const userQueries = require("../db/userQueries");
 
 exports.signup = async (req, res) => {
@@ -7,7 +8,13 @@ exports.signup = async (req, res) => {
   const exists = await userQueries.usernameExists(username);
   if (!exists) {
     userQueries.insertUser(req.body);
-    return res.json({ name, username, account, password });
+    return res.json({
+      name,
+      username,
+      account,
+      password,
+      msg: "Signup Successful",
+    });
   } else {
     return res.json({ msg: "Username already exists" });
   }
@@ -16,18 +23,29 @@ exports.signup = async (req, res) => {
 exports.login = async (req, res) => {
   const { username, password, account } = req.body;
   try {
-    const user = await userQueries.findByUsername(username);
+    const user = await userQueries.findByUsernameAndAccount({
+      username,
+      account,
+    });
     if (user.length > 0) {
       bcryptjs.compare(password, user[0].password, (err, data) => {
         if (data) {
           user[0].password = "****";
-          res.json({ user: user[0], msg: "Login Successful" });
+
+          const token = jwt.sign({ user }, process.env.JWT_SECRET);
+          res.cookie("auth", token, {
+            path: "/",
+            secure: true,
+            httpOnly: true,
+            sameSite: "none",
+          });
+          res.json({ user: user[0], msg: "Login Successful", token });
         } else {
           res.json({ msg: "Login Failed" });
         }
       });
     } else {
-      res.json({ msg: "Incorrect Username" });
+      res.json({ msg: "Incorrect Username or Account Type" });
     }
   } catch (error) {
     console.log(error);
