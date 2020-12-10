@@ -17,4 +17,14 @@ router.get("/all/users/", verifyToken, userController.allUsers);
 
 router.get("/all/accounts", verifyToken, accountController.allAccounts);
 
+router.get("/user/:username/profile", verifyToken, userController.viewUser);
+
+router.get(
+  "/user/:username/transactions",
+  verifyToken,
+  accountController.viewTransactions
+);
+
+router.post("/account/withdraw", verifyToken, accountController.withdraw);
+
 module.exports = router;
