@@ -33,12 +33,7 @@ exports.login = async (req, res) => {
           user[0].password = "****";
 
           const token = jwt.sign({ user }, process.env.JWT_SECRET);
-          res.cookie("auth", token, {
-            path: "/",
-            secure: true,
-            httpOnly: true,
-            sameSite: "none",
-          });
+          res.cookie("auth", token);
           res.json({ user: user[0], msg: "Login Successful", token });
         } else {
           res.json({ msg: "Login Failed" });
