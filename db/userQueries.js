@@ -1,5 +1,5 @@
-const { column, whereExists } = require("../db/initialise");
-const knex = require("../db/initialise");
+const { column, whereExists } = require("./init");
+const knex = require("./init");
 
 exports.insertUser = (user) => {
   knex("users")
@@ -14,7 +14,7 @@ exports.insertUser = (user) => {
 };
 
 exports.findByUsername = async (username) => {
-  return await knex
+  return knex
     .from("users")
     .select("*")
     .where("username", username)
@@ -26,7 +26,7 @@ exports.findByUsername = async (username) => {
 };
 
 exports.usernameExists = async (username) => {
-  return await knex
+  return knex
     .from("users")
     .select("*")
     .where("username", username)
@@ -38,7 +38,7 @@ exports.usernameExists = async (username) => {
 };
 
 exports.findByUsernameAndAccount = async (user) => {
-  return await knex
+  return knex
     .from("users")
     .select("*")
     .where(user)
