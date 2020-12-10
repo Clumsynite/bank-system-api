@@ -5,11 +5,11 @@ const cookieParser = require("cookie-parser");
 const indexRouter = require("./routes/index");
 const app = express();
 
-app.use(cors());
 app.use(cookieParser());
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
-require("./db/initialise");
+require("./db/init");
 
 app.use("/", indexRouter);
 
