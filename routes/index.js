@@ -11,6 +11,8 @@ router.post("/signup", userController.signup);
 
 router.post("/login", userController.login);
 
+router.post("/logout", userController.logout);
+
 router.get("/all-accounts", verifyToken, accountController.allAccounts);
 
 module.exports = router;

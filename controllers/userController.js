@@ -47,3 +47,8 @@ exports.login = async (req, res) => {
     return res.json(error);
   }
 };
+
+exports.logout = async (req, res) => {
+  res.cookie("auth", "", { maxAge: 0, expires: Date.now() });
+  res.json("Logout Successful");
+};
