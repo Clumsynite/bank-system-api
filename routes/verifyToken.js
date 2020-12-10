@@ -8,7 +8,7 @@ const verifyToken = async (req, res, next) => {
     const bearerToken = bearer[1];
     jwt.verify(bearerToken, process.env.JWT_SECRET, (err, data) => {
       if (err) {
-        return res, status(403).send("Error");
+        return res.status(403).send("Error");
       }
       req.user_data = data;
       next();
@@ -16,7 +16,7 @@ const verifyToken = async (req, res, next) => {
   } else if (token) {
     jwt.verify(token, process.env.JWT_SECRET, (err, data) => {
       if (err) {
-        return res, status(403).send("Error");
+        return res.status(403).send("Error");
       }
       req.user_data = data;
       next();
