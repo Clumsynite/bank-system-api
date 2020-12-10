@@ -57,3 +57,12 @@ exports.allUsers = async () => {
     return error;
   }
 };
+
+exports.viewUserByUsername = async (username) => {
+  try {
+    return await knex.from("users").select("*").where(username);
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};

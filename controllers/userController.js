@@ -32,7 +32,7 @@ exports.login = async (req, res) => {
         if (data) {
           user[0].password = "****";
 
-          const token = jwt.sign({ user }, process.env.JWT_SECRET);
+          const token = jwt.sign({ ...user[0] }, process.env.JWT_SECRET);
           res.cookie("auth", token);
           res.json({ user: user[0], msg: "Login Successful", token });
         } else {
@@ -43,8 +43,7 @@ exports.login = async (req, res) => {
       res.json({ msg: "Incorrect Username or Account Type" });
     }
   } catch (error) {
-    console.log(error);
-    return res.json(error);
+    return res.json({ msg: "Login Error" });
   }
 };
 
@@ -58,6 +57,19 @@ exports.allUsers = async (req, res) => {
     const allUsers = await userQueries.allUsers();
     res.json(allUsers);
   } catch (error) {
-    return res.json({ error });
+    return res.json({ msg: "Error viewing Users" });
+  }
+};
+
+exports.viewUser = async (req, res) => {
+  try {
+    const user = await userQueries.viewUserByUsername(req.params);
+    if (user.length > 0) {
+      return res.json(user);
+    } else {
+      return req.json({ msg: "User not found" });
+    }
+  } catch (error) {
+    return res.json({ msg: "User not found" });
   }
 };
