@@ -35,7 +35,6 @@ exports.viewUserTransactions = async (username) => {
 
 exports.cashTransaction = async (transaction) => {
   try {
-    console.log(transaction);
     return await knex("accounts").insert(transaction);
   } catch (error) {
     return error;

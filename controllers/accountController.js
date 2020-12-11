@@ -46,7 +46,6 @@ exports.deposit = async (req, res) => {
     const total = await accountQueries.getUserTotal({
       user_id: req.user.user_id.toString(),
     });
-    console.log(total);
     accountQueries.cashTransaction({
       user_id: req.user.user_id.toString(),
       cash_deposited: amount,
