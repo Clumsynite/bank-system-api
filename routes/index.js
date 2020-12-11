@@ -27,4 +27,6 @@ router.get(
 
 router.post("/account/withdraw", verifyToken, accountController.withdraw);
 
+router.post("/account/deposit", verifyToken, accountController.deposit);
+
 module.exports = router;
