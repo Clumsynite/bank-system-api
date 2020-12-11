@@ -12,11 +12,8 @@ exports.allAccounts = async (req, res) => {
 
 exports.viewTransactions = async (req, res) => {
   try {
-    return await knex
-      .from("accounts")
-      .join("users", { "accounts.user_id": "users.user_id" })
-      .select("*")
-      .where(username);
+    const transactions = await accountQueries.viewUserTransactions(req.params);
+    res.json(transactions);
   } catch (error) {
     return res.json({ err: "Error viewing Transaction" });
   }
@@ -28,16 +25,35 @@ exports.withdraw = async (req, res) => {
     const total = await accountQueries.getUserTotal({
       user_id: req.user.user_id.toString(),
     });
-    if (total > amount) {
+    if (total.total < amount) {
       return res.json({ err: "No sufficient Fund" });
     } else {
-      accountQueries.cashWithdrawal({
+      await accountQueries.cashTransaction({
         user_id: req.user.user_id.toString(),
         cash_withdrawn: amount,
+        total: total.total - amount,
       });
       res.json({ msg: "Withdrawal successful" });
     }
   } catch (error) {
-    return res.json({ msg: "Error logging Withdrawal" });
+    return res.json({ err: "Error logging Withdrawal" });
+  }
+};
+
+exports.deposit = async (req, res) => {
+  try {
+    const amount = Number(req.body.amount);
+    const total = await accountQueries.getUserTotal({
+      user_id: req.user.user_id.toString(),
+    });
+    console.log(total);
+    accountQueries.cashTransaction({
+      user_id: req.user.user_id.toString(),
+      cash_deposited: amount,
+      total: total.total + amount,
+    });
+    res.json({ msg: "Deposit successful" });
+  } catch (error) {
+    return res.json({ err: "Error logging Deposit" });
   }
 };
