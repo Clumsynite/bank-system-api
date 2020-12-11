@@ -26,9 +26,15 @@ exports.cashWithdrawal = async (transaction) => {
   }
 };
 
-exports.getUserTotal = async (username) => {
+exports.getUserTotal = async (user) => {
   try {
-    return await knex.from("accounts").select("total").where(username);
+    console.log(user);
+    return await knex
+      .from("accounts")
+      .select("*")
+      .where(user)
+      .orderBy("transaction_time", "desc")
+      .first();
   } catch (error) {
     return error;
   }
