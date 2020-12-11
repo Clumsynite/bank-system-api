@@ -1,8 +1,8 @@
 const { column, whereExists } = require("./init");
 const knex = require("./init");
 
-exports.insertUser = (user) => {
-  knex("users")
+exports.insertUser = async (user) => {
+  return await knex("users")
     .insert(user)
     .then((data) => {
       return knex.from("users").select("*").where("username", user.username);
