@@ -12,7 +12,7 @@ const knex = require("knex")(options);
 
 knex
   .raw("SELECT VERSION()")
-  .then((version) => console.log(version[0][0]))
+  .then((version) => console.log("Database connected\n" + version[0][0]))
   .catch((err) => {
     console.log(err);
     throw err;
