@@ -4,18 +4,26 @@ const userQueries = require("../db/userQueries");
 const accountQueries = require("../db/accountQueries");
 
 exports.signup = async (req, res) => {
-  const { username, password } = req.body;
-  req.body.password = await bcryptjs.hash(password, 10);
-  const exists = await userQueries.usernameExists(username);
-  if (!exists) {
-    const user = await userQueries.insertUser(req.body);
-    accountQueries.cashTransaction({
-      user_id: user[0].user_id.toString(),
-      total: 0,
-    });
-    return res.json({ ...user[0], msg: "Signup Successful" });
-  } else {
-    return res.json({ err: "Username already exists" });
+  try {
+    const { username } = req.body;
+    const hashedPassword = await bcryptjs.hash(req.body.password, 10);
+    const exists = await userQueries.usernameExists(username);
+    if (!exists) {
+      const user = await userQueries.insertUser({
+        ...req.body,
+        password: hashedPassword,
+      });
+      await accountQueries.cashTransaction({
+        user_id: user[0].user_id.toString(),
+        total: 0,
+      });
+      return res.json({ ...user[0], msg: "Signup Successful" });
+    } else {
+      return res.json({ err: "Username already exists" });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.json({ err: "Signup Failed" });
   }
 };
 
