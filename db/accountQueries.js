@@ -9,18 +9,34 @@ exports.allAccounts = async () => {
   }
 };
 
-exports.viewTransactionByUsername = async (username) => {
+exports.viewUserTransactions = async (username) => {
   try {
-    return await knex.from("users").select("*").where(username);
+    return await knex("accounts")
+      .join("users", {
+        "accounts.user_id": "users.user_id",
+      })
+      .select(
+        "transaction_id",
+        "transaction_time",
+        "accounts.user_id",
+        "username",
+        "cash_withdrawn",
+        "cash_deposited",
+        "total",
+        "account"
+      )
+      .where(username)
+      .orderBy("transaction_time", "desc");
   } catch (error) {
     console.log(error);
     return error;
   }
 };
 
-exports.cashWithdrawal = async (transaction) => {
+exports.cashTransaction = async (transaction) => {
   try {
-    return knex("accounts").insert(transaction);
+    console.log(transaction);
+    return await knex("accounts").insert(transaction);
   } catch (error) {
     return error;
   }
@@ -28,7 +44,6 @@ exports.cashWithdrawal = async (transaction) => {
 
 exports.getUserTotal = async (user) => {
   try {
-    console.log(user);
     return await knex
       .from("accounts")
       .select("*")
