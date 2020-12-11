@@ -6,7 +6,7 @@ exports.allAccounts = async (req, res) => {
     const allAcounts = await accountQueries.allAccounts();
     res.json(allAcounts);
   } catch (error) {
-    return res.json({ msg: "Error viewing accounts" });
+    return res.json({ err: "Error viewing accounts" });
   }
 };
 
@@ -18,17 +18,25 @@ exports.viewTransactions = async (req, res) => {
       .select("*")
       .where(username);
   } catch (error) {
-    return res.json({ msg: "Error viewing Transaction" });
+    return res.json({ err: "Error viewing Transaction" });
   }
 };
 
 exports.withdraw = async (req, res) => {
   try {
-    accountQueries.cashWithdrawal({
+    const amount = Number(req.body.amount);
+    const total = await accountQueries.getUserTotal({
       user_id: req.user.user_id.toString(),
-      cash_withdrawn: Number(req.body.amount),
     });
-    res.json(req.user);
+    if (total > amount) {
+      return res.json({ err: "No sufficient Fund" });
+    } else {
+      accountQueries.cashWithdrawal({
+        user_id: req.user.user_id.toString(),
+        cash_withdrawn: amount,
+      });
+      res.json({ msg: "Withdrawal successful" });
+    }
   } catch (error) {
     return res.json({ msg: "Error logging Withdrawal" });
   }

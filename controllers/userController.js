@@ -16,7 +16,7 @@ exports.signup = async (req, res) => {
       msg: "Signup Successful",
     });
   } else {
-    return res.json({ msg: "Username already exists" });
+    return res.json({ err: "Username already exists" });
   }
 };
 
@@ -36,14 +36,14 @@ exports.login = async (req, res) => {
           res.cookie("auth", token);
           res.json({ user: user[0], msg: "Login Successful", token });
         } else {
-          res.json({ msg: "Login Failed" });
+          res.json({ err: "Login Failed" });
         }
       });
     } else {
-      res.json({ msg: "Incorrect Username or Account Type" });
+      res.json({ err: "Incorrect Username or Account Type" });
     }
   } catch (error) {
-    return res.json({ msg: "Login Error" });
+    return res.json({ err: "Login Error" });
   }
 };
 
@@ -57,7 +57,7 @@ exports.allUsers = async (req, res) => {
     const allUsers = await userQueries.allUsers();
     res.json(allUsers);
   } catch (error) {
-    return res.json({ msg: "Error viewing Users" });
+    return res.json({ err: "Error viewing Users" });
   }
 };
 
@@ -67,9 +67,9 @@ exports.viewUser = async (req, res) => {
     if (user.length > 0) {
       return res.json(user);
     } else {
-      return req.json({ msg: "User not found" });
+      return req.json({ err: "User not found" });
     }
   } catch (error) {
-    return res.json({ msg: "User not found" });
+    return res.json({ err: "User not found" });
   }
 };
