@@ -1,20 +1,19 @@
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const userQueries = require("../db/userQueries");
+const accountQueries = require("../db/accountQueries");
 
 exports.signup = async (req, res) => {
-  const { name, username, account, password } = req.body;
-  req.body.password = await bcryptjs.hash(req.body.password, 10);
+  const { username, password } = req.body;
+  req.body.password = await bcryptjs.hash(password, 10);
   const exists = await userQueries.usernameExists(username);
   if (!exists) {
-    userQueries.insertUser(req.body);
-    return res.json({
-      name,
-      username,
-      account,
-      password,
-      msg: "Signup Successful",
+    const user = await userQueries.insertUser(req.body);
+    accountQueries.cashTransaction({
+      user_id: user[0].user_id.toString(),
+      total: 0,
     });
+    return res.json({ ...user[0], msg: "Signup Successful" });
   } else {
     return res.json({ err: "Username already exists" });
   }
