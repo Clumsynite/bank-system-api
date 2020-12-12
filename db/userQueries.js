@@ -60,7 +60,19 @@ exports.allUsers = async () => {
 
 exports.allCustomers = async () => {
   try {
-    return await knex.from("users").select("*").where({ account: "customer" });
+    return await knex("users")
+      .join("accounts", {
+        "users.user_id": "accounts.user_id",
+      })
+      .select(
+        "users.user_id",
+        "users.username",
+        "users.name",
+        "users.joined",
+        "accounts.total"
+      )
+      .where({ account: "customer" })
+      .orderBy("accounts.transaction_time", "desc");
   } catch (error) {
     console.log(error);
     return error;
