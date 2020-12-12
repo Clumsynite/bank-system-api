@@ -26,11 +26,7 @@ router.get(
   verifyToken,
   accountController.viewTransactions
 );
-router.get(
-  "/user/:user_id/balance",
-  verifyToken,
-  accountController.balance
-);
+router.get("/user/:user_id/balance", verifyToken, accountController.balance);
 
 router.post("/account/withdraw", verifyToken, accountController.withdraw);
 
