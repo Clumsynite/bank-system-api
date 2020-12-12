@@ -56,3 +56,18 @@ exports.deposit = async (req, res) => {
     return res.json({ err: "Error logging Deposit" });
   }
 };
+
+exports.balance = async (req, res) => {
+  try {
+    const balance = await accountQueries.getUserTotal({
+      user_id: req.params.user_id,
+    });
+    return res.json({
+      msg: `Total balance is ${balance.total}`,
+      balance: balance.total,
+      latest: balance,
+    });
+  } catch (error) {
+    return res.json({ err: "Error getting balance" });
+  }
+};
