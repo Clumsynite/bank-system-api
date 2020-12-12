@@ -68,6 +68,15 @@ exports.allUsers = async (req, res) => {
   }
 };
 
+exports.allCustomers = async (req, res) => {
+  try {
+    const allCustomers = await userQueries.allCustomers();
+    res.json(allCustomers);
+  } catch (error) {
+    return res.json({ err: "Error viewing Users" });
+  }
+};
+
 exports.viewUser = async (req, res) => {
   try {
     const user = await userQueries.viewUserByUsername(req.params);

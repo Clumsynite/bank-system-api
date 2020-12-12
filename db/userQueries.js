@@ -58,6 +58,15 @@ exports.allUsers = async () => {
   }
 };
 
+exports.allCustomers = async () => {
+  try {
+    return await knex.from("users").select("*").where({ account: "customer" });
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
 exports.viewUserByUsername = async (username) => {
   try {
     return await knex.from("users").select("*").where(username);

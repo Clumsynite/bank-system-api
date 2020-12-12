@@ -15,6 +15,8 @@ router.post("/logout", userController.logout);
 
 router.get("/all/users/", verifyToken, userController.allUsers);
 
+router.get("/all/customers/", verifyToken, userController.allCustomers);
+
 router.get("/all/accounts", verifyToken, accountController.allAccounts);
 
 router.get("/user/:username/profile", verifyToken, userController.viewUser);
