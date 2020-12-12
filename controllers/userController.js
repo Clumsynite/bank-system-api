@@ -71,7 +71,12 @@ exports.allUsers = async (req, res) => {
 exports.allCustomers = async (req, res) => {
   try {
     const allCustomers = await userQueries.allCustomers();
-    res.json(allCustomers);
+    const filterCustomers = Array.from(
+      new Set(allCustomers.map((a) => a.username))
+    ).map((username) => {
+      return allCustomers.find((a) => a.username === username);
+    });
+    res.json(filterCustomers);
   } catch (error) {
     return res.json({ err: "Error viewing Users" });
   }
